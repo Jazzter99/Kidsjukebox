@@ -214,7 +214,7 @@ details summary{cursor:pointer;font-weight:700;font-size:17px}
   const saveCfg = () => put("cfg", cfg);
   const saveTok = () => put("tok", tok);
 
-  let current = null, isPlaying = false;
+  let current = null, isPlaying = false, lastAction = 0;
 
   function toast(msg){
     const t = $("toast"); t.textContent = msg; t.classList.add("show");
@@ -295,7 +295,7 @@ details summary{cursor:pointer;font-weight:700;font-size:17px}
   }
   async function tap(t, el){
     if (el.classList.contains("busy")) return;
-    el.classList.add("busy");
+    el.classList.add("busy"); lastAction = Date.now();
     try {
       if (current === t.id && isPlaying){ await api("PUT", "/me/player/pause"); isPlaying = false; }
       else if (current === t.id){ const id = await resolveDevice(); await api("PUT", "/me/player/play?device_id=" + id); isPlaying = true; }
@@ -304,7 +304,7 @@ details summary{cursor:pointer;font-weight:700;font-size:17px}
       el.classList.add("oops"); setTimeout(() => el.classList.remove("oops"), 450);
       toast(e.message);
     }
-    el.classList.remove("busy"); paint();
+    el.classList.remove("busy"); lastAction = Date.now(); paint();
   }
   $("stop").addEventListener("click", async () => {
     if (!current) return;
@@ -318,26 +318,32 @@ details summary{cursor:pointer;font-weight:700;font-size:17px}
   $("next").addEventListener("click", async () => {
     const b = $("next");
     if (!canNext() || b.dataset.busy) return;
-    b.dataset.busy = "1";
+    b.dataset.busy = "1"; lastAction = Date.now();
     try {
       const id = await resolveDevice();
       await api("POST", "/me/player/next?device_id=" + id);
-      setTimeout(poll, 800);
+      lastAction = Date.now(); isPlaying = true; paint();
+      setTimeout(poll, 3500);
     } catch(e){ toast(e.message); }
     delete b.dataset.busy;
   });
 
   // zjistit, co skutečně hraje (třeba když písnička skončí nebo ji někdo pustí jinde)
+  // Spotify chvíli po přepnutí hlásí přechodný stav, proto těsně po ťuknutí nečteme;
+  // a „current“ jen přepisujeme, když hraje jiné naše tlačítko – nikdy ho nemažeme
+  const idOf = u => (u || "").split(":").pop();
   async function poll(){
     if (document.hidden || !tok || !cfg.tiles.length) return;
+    if (Date.now() - lastAction < 3000) return;
     try {
       const s = await api("GET", "/me/player");
+      if (Date.now() - lastAction < 3000) return;
       if (!s){ isPlaying = false; }
       else {
         isPlaying = !!s.is_playing;
-        const ctx = s.context && s.context.uri, item = s.item && s.item.uri;
-        const hit = cfg.tiles.find(t => t.uri === ctx || t.uri === item);
-        current = hit ? hit.id : (isPlaying ? null : current);
+        const ctx = idOf(s.context && s.context.uri), item = idOf(s.item && s.item.uri);
+        const hit = cfg.tiles.find(t => idOf(t.uri) === ctx || idOf(t.uri) === item);
+        if (hit) current = hit.id;
       }
       paint();
     } catch(e){}

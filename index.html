@@ -20,7 +20,7 @@
   --green:#1ED760; --green2:#1DB954; --ok:#1ED760; --bad:#F15E6C; --panel:#181818;
   --c1:#E8115B; --c2:#1E3264; --c3:#8D67AB; --c4:#E13300; --c5:#148A08; --c6:#BA5D07;
   --font:"Figtree", "Helvetica Neue", Helvetica, Arial, system-ui, -apple-system, sans-serif;
-  --bar:clamp(124px,15vw,150px);
+  --bar:clamp(124px,15vw,150px); --tabs:64px; --safe:env(safe-area-inset-bottom,0px);
   color-scheme:dark; box-sizing:border-box;
 }
 *,*::before,*::after{box-sizing:inherit}
@@ -31,7 +31,7 @@ body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:
 img{max-width:100%}
 
 /* ---------- dětská plocha ---------- */
-.stage{min-height:100vh;padding:calc(18px + env(safe-area-inset-top,0px)) clamp(16px,3vw,32px) calc(var(--bar) + 40px + env(safe-area-inset-bottom,0px));
+.stage{min-height:100vh;padding:calc(18px + env(safe-area-inset-top,0px)) clamp(16px,3vw,32px) calc(var(--bar) + var(--tabs) + 40px + var(--safe));
   background:linear-gradient(180deg, var(--tint,#3a2a6b) 0px, #121212 340px)}
 .head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:6px 0 22px}
 .head h1{margin:0;font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.02em}
@@ -69,7 +69,7 @@ img{max-width:100%}
 .empty b{color:var(--ink)}
 
 /* právě hraje */
-.np{position:fixed;left:clamp(8px,1.5vw,16px);right:clamp(8px,1.5vw,16px);bottom:calc(10px + env(safe-area-inset-bottom,0px));
+.np{position:fixed;left:clamp(8px,1.5vw,16px);right:clamp(8px,1.5vw,16px);bottom:calc(var(--tabs) + 6px + var(--safe));
   height:var(--bar);border-radius:14px;background:color-mix(in srgb,var(--tint,#3a2a6b) 55%,#121212 45%);
   display:flex;align-items:center;gap:clamp(12px,2vw,22px);padding:0 clamp(12px,2vw,22px);box-shadow:0 -6px 30px rgba(0,0,0,.55);z-index:5}
 .np-cov{width:calc(var(--bar) - 36px);height:calc(var(--bar) - 36px);flex:0 0 auto;border-radius:8px;overflow:hidden;background:var(--card2);
@@ -144,17 +144,32 @@ input[type=range]{width:100%}
 .acts{display:flex;flex-wrap:wrap;gap:8px}
 .acts .btn{font-size:14px;padding:7px 14px}
 details summary{cursor:pointer;font-weight:700;font-size:17px}
-.toast{position:fixed;left:50%;bottom:calc(var(--bar) + 30px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#fff;color:#000;font-weight:600;
+.toast{position:fixed;left:50%;bottom:calc(var(--bar) + var(--tabs) + 24px + var(--safe));transform:translateX(-50%);background:#fff;color:#000;font-weight:600;
   padding:10px 18px;border-radius:8px;font-size:16px;opacity:0;transition:opacity .2s;z-index:20;pointer-events:none;max-width:90vw;text-align:center}
 .toast.show{opacity:1}
 .hidden{display:none}
 .sec{font-size:clamp(21px,2.7vw,27px);font-weight:800;letter-spacing:-.01em;margin:30px 0 14px}
 .sec:first-child{margin-top:8px}
-.chips{display:flex;gap:10px;flex-wrap:wrap;margin:-8px 0 18px}
+.chips{display:flex;gap:10px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:-8px calc(-1 * clamp(16px,3vw,32px)) 18px;padding:0 clamp(16px,3vw,32px)}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto}
 .chip{font-family:inherit;font-size:clamp(15px,1.8vw,17px);font-weight:600;border:0;border-radius:999px;padding:9px 18px;background:rgba(255,255,255,.1);color:var(--ink);cursor:pointer}
 .chip.sel{background:var(--green);color:#000}
 .chip:active{transform:scale(.94)}
 .head-r{display:flex;gap:10px;align-items:center}
+.head-l{display:flex;gap:12px;align-items:center;min-width:0}
+.head-l h1{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.avatar{width:44px;height:44px;border-radius:50%;background:#E8115B;font-size:24px;color:#fff}
+.avatar span{line-height:1}
+/* spodní lišta jako v mobilním Spotify – jen na hraní */
+.tabs{position:fixed;left:0;right:0;bottom:0;height:calc(var(--tabs) + var(--safe));padding-bottom:var(--safe);z-index:4;
+  display:flex;background:#000}
+.tabs::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:28px;background:linear-gradient(180deg,rgba(0,0,0,0),#000);pointer-events:none}
+.tab{flex:1 1 0;border:0;background:transparent;color:var(--soft);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;padding:0 0 8px}
+.tab svg{width:28px;height:28px;fill:currentColor;display:block}
+.tab.sel{color:#fff}
+.tab:active svg{transform:scale(.88)}
 .cov.liked{background:linear-gradient(135deg,#450af5 0%,#8e8ee5 55%,#c4efd9 100%)}
 .cov.liked svg{position:relative;width:42%;height:42%;fill:#fff}
 .toy{flex:0 0 auto;width:clamp(52px,6.4vw,64px);height:clamp(52px,6.4vw,64px);border-radius:50%;border:0;background:transparent;color:var(--soft);
@@ -171,6 +186,36 @@ details summary{cursor:pointer;font-weight:700;font-size:17px}
 .ctrls{display:flex;align-items:center;gap:clamp(2px,1vw,10px);flex:0 0 auto}
 select{font-family:inherit;font-size:16px;padding:10px 12px;border-radius:6px;border:1px solid #727272;background:var(--card2);color:var(--ink)}
 @media (max-width:760px){ .toy.wide{display:none} }
+/* iPhone na výšku: lišta ve dvou řádcích */
+@media (max-width:700px){
+  :root{--bar:178px}
+  .np{height:auto;display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"cov txt heart" "ctl ctl ctl";
+    column-gap:12px;row-gap:6px;padding:10px 12px 18px}
+  .np-cov{grid-area:cov;width:58px;height:58px;font-size:30px;border-radius:6px}
+  .np-txt{grid-area:txt}
+  .np .heart{grid-area:heart}
+  .ctrls{grid-area:ctl;justify-content:space-between;width:100%;padding:0 4px}
+  .pp{width:76px;height:76px}
+  .nx{width:60px;height:60px}
+  .toy{width:52px;height:52px}
+  .np-prog{left:14px;right:14px;bottom:7px;height:3px}
+  .grid{gap:12px}
+  .card-t{padding:10px;gap:8px}
+  .fab{right:16px;bottom:64px;width:46px;height:46px}
+  .head{margin:4px 0 18px}
+  .head-l h1{font-size:23px}
+  .head .toy{width:42px;height:42px}
+  .avatar{width:38px;height:38px;font-size:20px}
+  .sec{margin:24px 0 12px}
+}
+/* iPhone na šířku: nižší lišta */
+@media (max-height:520px) and (min-width:701px){
+  :root{--bar:100px;--tabs:52px}
+  .np-cov{width:68px;height:68px}
+  .pp{width:72px;height:72px}
+  .nx{width:58px;height:58px}
+  .tab span{display:none}
+}
 @media (prefers-reduced-motion: reduce){ .boop{animation:none} }
 </style>
 </head>
@@ -178,8 +223,14 @@ select{font-family:inherit;font-size:16px;padding:10px 12px;border-radius:6px;bo
 
 <main class="stage" id="stage">
   <header class="head">
-    <h1 id="greet">Dobrý den</h1>
+    <div class="head-l">
+      <button class="toy avatar" data-boop aria-label="Profil"><span>🦁</span></button>
+      <h1 id="greet">Dobrý den</h1>
+    </div>
     <div class="head-r">
+    <button class="toy wide" data-boop aria-label="Nedávno přehrávané">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm1 3v4.6l3.2 3.2-1.4 1.4L11 12.4V7h2z"/></svg>
+    </button>
     <button class="toy" data-boop aria-label="Novinky">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a2.5 2.5 0 0 0 2.5-2.5h-5A2.5 2.5 0 0 0 12 22zm7-6v-5a7 7 0 0 0-5.5-6.8v-.7a1.5 1.5 0 0 0-3 0v.7A7 7 0 0 0 5 11v5l-2 2v1h18v-1l-2-2z"/></svg>
     </button>
@@ -190,7 +241,7 @@ select{font-family:inherit;font-size:16px;padding:10px 12px;border-radius:6px;bo
     </div>
   </header>
   <div class="chips" id="chips">
-    <button class="chip sel">Vše</button><button class="chip">Hudba</button><button class="chip">Pohádky</button><button class="chip">Podcasty</button>
+    <button class="chip sel">Vše</button><button class="chip">Hudba</button><button class="chip">Pohádky</button><button class="chip">Podcasty</button><button class="chip">Zvířátka</button><button class="chip">Tancování</button>
   </div>
   <div id="sections"></div>
   <div class="empty hidden" id="empty"></div>
@@ -206,7 +257,7 @@ select{font-family:inherit;font-size:16px;padding:10px 12px;border-radius:6px;bo
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.3-4.5-9.3-8.9C1.3 8.3 3.3 4.6 6.8 4.6c2 0 3.5 1.1 4.2 2.3.7-1.2 2.2-2.3 4.2-2.3 3.5 0 5.5 3.7 4.1 7-2 4.4-7.3 8.9-7.3 8.9z"/></svg>
   </button>
   <div class="ctrls">
-    <button class="toy dot wide" data-toggle aria-label="Náhodně">
+    <button class="toy dot" data-toggle aria-label="Náhodně">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3l4 4-4 4V8h-2a3 3 0 0 0-2.4 1.2l-5 6.6A5 5 0 0 1 3.6 18H2v-2h1.6a3 3 0 0 0 2.4-1.2l5-6.6A5 5 0 0 1 15 6h2V3zM2 6h1.6a5 5 0 0 1 4 2l.5.7-1.2 1.6-.9-1.1A3 3 0 0 0 3.6 8H2V6zm15 7l4 4-4 4v-3h-2a5 5 0 0 1-4-2l-.5-.7 1.2-1.6.9 1.1A3 3 0 0 0 15 16h2v-3z"/></svg>
     </button>
     <button class="toy" data-boop aria-label="Předchozí">
@@ -218,7 +269,7 @@ select{font-family:inherit;font-size:16px;padding:10px 12px;border-radius:6px;bo
     <button class="ctl nx" id="next" aria-label="Další písnička" disabled>
       <svg viewBox="0 0 24 24" width="48" height="48" aria-hidden="true"><path d="M5 5.5v13a.8.8 0 0 0 1.2.7l10-6.5a.8.8 0 0 0 0-1.4l-10-6.5A.8.8 0 0 0 5 5.5z"/><rect x="17" y="5" width="2.6" height="14" rx="1"/></svg>
     </button>
-    <button class="toy dot wide" data-toggle aria-label="Opakovat">
+    <button class="toy dot" data-toggle aria-label="Opakovat">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
     </button>
     <button class="toy wide" data-boop aria-label="Zařízení">
@@ -227,6 +278,12 @@ select{font-family:inherit;font-size:16px;padding:10px 12px;border-radius:6px;bo
   </div>
   <div class="np-prog"><i id="npBar"></i></div>
 </div>
+<nav class="tabs" id="tabs" aria-label="Spodní lišta">
+  <button class="tab sel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 7.5V21h-6.5v-6h-5v6H3V10.5z"/></svg><span>Domů</span></button>
+  <button class="tab"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M10.5 3a7.5 7.5 0 0 1 6 12l4.8 4.8-1.5 1.5-4.8-4.8A7.5 7.5 0 1 1 10.5 3zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11z"/></svg><span>Hledat</span></button>
+  <button class="tab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3h2.2v18H4zm4.4 0h2.2v18H8.4zm4.3.6 2.1-.6 5.2 17.4-2.1.6z"/></svg><span>Knihovna</span></button>
+  <button class="tab"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm1 3v4h4v2h-4v4h-2v-4H7v-2h4V7h2z"/></svg><span>Vytvořit</span></button>
+</nav>
 <div class="hint" id="hint">Podržte 3 sekundy</div>
 
 <section class="sheet" id="sheet" aria-label="Nastavení pro rodiče">
@@ -408,7 +465,7 @@ select{font-family:inherit;font-size:16px;padding:10px 12px;border-radius:6px;bo
     if (!cfg.device) throw new Error("Není vybrán reproduktor");
     const list = await devices();
     let d = list.find(x => x.id === cfg.device.id) || list.find(x => x.name === cfg.device.name);
-    if (!d) throw new Error("Reproduktor „" + cfg.device.name + "“ teď Spotify nevidí");
+    if (!d) return cfg.device.id;   // nevidí ho – zkusíme ho přesto probudit uloženým ID
     if (d.id !== cfg.device.id){ cfg.device.id = d.id; saveCfg(); }
     return d.id;
   }
@@ -424,9 +481,13 @@ select{font-family:inherit;font-size:16px;padding:10px 12px;border-radius:6px;bo
     try { await api("PUT", "/me/player/play?device_id=" + id, body); }
     catch(e){
       if (e.status !== 404) throw e;
-      await api("PUT", "/me/player", { device_ids:[id], play:false });
-      await new Promise(r => setTimeout(r, 600));
-      await api("PUT", "/me/player/play?device_id=" + id, body);
+      try {
+        await api("PUT", "/me/player", { device_ids:[id], play:false });
+        await new Promise(r => setTimeout(r, 1500));
+        await api("PUT", "/me/player/play?device_id=" + id, body);
+      } catch(e2){
+        throw new Error("Reproduktor „" + cfg.device.name + "“ teď nereaguje – zapněte ho prosím");
+      }
     }
     if (cfg.volOn) api("PUT", `/me/player/volume?volume_percent=${cfg.vol}&device_id=${id}`).catch(() => {});
   }
@@ -573,6 +634,10 @@ select{font-family:inherit;font-size:16px;padding:10px 12px;border-radius:6px;bo
     if (b.hasAttribute("data-toggle")) b.classList.toggle("on");
     boop(b);
   }));
+  $("tabs").addEventListener("click", e => {
+    const c = e.target.closest(".tab"); if (!c) return;
+    document.querySelectorAll(".tab").forEach(x => x.classList.toggle("sel", x === c)); boop(c.querySelector("svg"));
+  });
   $("chips").addEventListener("click", e => {
     const c = e.target.closest(".chip"); if (!c) return;
     document.querySelectorAll(".chip").forEach(x => x.classList.toggle("sel", x === c)); boop(c);

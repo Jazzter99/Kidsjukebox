@@ -7,73 +7,99 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#121212">
 <meta name="apple-mobile-web-app-title" content="Písničky">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎵</text></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23FFC83D'/><text x='50' y='68' font-size='56' text-anchor='middle'>🎵</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23121212'/><circle cx='50' cy='50' r='34' fill='%231ED760'/><text x='50' y='63' font-size='38' text-anchor='middle'>🎵</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#D7E8EF; --ink:#1E2B3F; --soft:#4D5E73; --panel:#FFFFFF; --line:#C9D5DE; --ok:#1F8A5B; --bad:#C93C3C;
-  --c1:#FFC83D; --c2:#4FC1A6; --c3:#7AA8FF; --c4:#FF8FB1; --c5:#B98AF0; --c6:#FF9F43;
-  --font:"Baloo 2", ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", sans-serif;
-  box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#121212; --base:#121212; --card:#181818; --card2:#282828; --ink:#FFFFFF; --soft:#B3B3B3; --line:#3E3E3E;
+  --green:#1ED760; --green2:#1DB954; --ok:#1ED760; --bad:#F15E6C; --panel:#181818;
+  --c1:#E8115B; --c2:#1E3264; --c3:#8D67AB; --c4:#E13300; --c5:#148A08; --c6:#BA5D07;
+  --font:"Figtree", "Helvetica Neue", Helvetica, Arial, system-ui, -apple-system, sans-serif;
+  --bar:clamp(124px,15vw,150px);
+  color-scheme:dark; box-sizing:border-box;
 }
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){ --bg:#1D2A40; --ink:#F1F5FA; --soft:#A9B7C9; --panel:#26354D; --line:#3A4C68; --ok:#5BD69C; --bad:#FF7A7A; }
-}
-:root[data-theme="dark"]{ --bg:#1D2A40; --ink:#F1F5FA; --soft:#A9B7C9; --panel:#26354D; --line:#3A4C68; --ok:#5BD69C; --bad:#FF7A7A; }
 *,*::before,*::after{box-sizing:inherit}
-html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+html{height:100%;background:var(--bg)}
 body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--font);
   -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation;
-  overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+  overscroll-behavior:none;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
 img{max-width:100%}
 
 /* ---------- dětská plocha ---------- */
-.stage{padding:clamp(16px,3vw,32px);padding-bottom:170px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(42vw,190px),1fr));gap:clamp(16px,2.8vw,30px)}
-.pebble{position:relative;aspect-ratio:1;border:0;cursor:pointer;padding:0;background:var(--col);color:#1E2B3F;font-family:inherit;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 10px 0 color-mix(in srgb,var(--col) 62%,#000 38%);transition:transform .12s ease, box-shadow .12s ease}
-.pebble:nth-child(4n+1){border-radius:46% 54% 50% 50% / 52% 46% 54% 48%}
-.pebble:nth-child(4n+2){border-radius:54% 46% 44% 56% / 48% 56% 44% 52%}
-.pebble:nth-child(4n+3){border-radius:50% 50% 56% 44% / 44% 52% 48% 56%}
-.pebble:nth-child(4n+4){border-radius:44% 56% 52% 48% / 56% 44% 56% 44%}
-.pebble:active{transform:translateY(8px);box-shadow:0 2px 0 color-mix(in srgb,var(--col) 62%,#000 38%)}
-.pebble:focus-visible{outline:5px solid var(--ink);outline-offset:6px}
-.pebble .emo{font-size:clamp(60px,12vw,100px);line-height:1;pointer-events:none}
-.pebble .pic{width:80%;height:80%;object-fit:cover;border-radius:inherit;pointer-events:none}
-.pebble.playing{animation:bob 1.6s ease-in-out infinite}
-.pebble.playing::after{content:"";position:absolute;inset:-10px;border-radius:inherit;border:5px solid var(--ink);pointer-events:none}
-.pebble.paused .emo,.pebble.paused .pic{opacity:.45}
-.pebble.busy .emo,.pebble.busy .pic{animation:pulse .7s ease-in-out infinite}
-.pebble.oops{animation:shake .4s}
-@keyframes bob{0%,100%{transform:rotate(-2deg) translateY(0)}50%{transform:rotate(2deg) translateY(-6px)}}
-@keyframes pulse{50%{opacity:.4}}
+.stage{min-height:100vh;padding:calc(18px + env(safe-area-inset-top,0px)) clamp(16px,3vw,32px) calc(var(--bar) + 40px + env(safe-area-inset-bottom,0px));
+  background:linear-gradient(180deg, var(--tint,#3a2a6b) 0px, #121212 340px)}
+.head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:6px 0 22px}
+.head h1{margin:0;font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.02em}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(42vw,200px),1fr));gap:clamp(14px,2.4vw,24px)}
+.card-t{position:relative;border:0;padding:clamp(10px,1.4vw,16px);border-radius:10px;background:var(--card);color:var(--ink);font-family:inherit;
+  text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:10px;transition:background .2s, transform .12s}
+.card-t:active{transform:scale(.96);background:var(--card2)}
+.card-t:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.cov{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--col);
+  box-shadow:0 8px 24px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;pointer-events:none}
+.cov::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(0,0,0,.25))}
+.cov img{position:relative;width:100%;height:100%;object-fit:cover}
+.cov .emo{position:relative;font-size:clamp(56px,10vw,92px);line-height:1}
+.ttl{font-weight:700;font-size:clamp(15px,1.9vw,19px);line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;
+  display:flex;align-items:center;gap:8px}
+.sub{color:var(--soft);font-size:clamp(13px,1.5vw,15px);margin-top:-6px;pointer-events:none}
+.fab{position:absolute;right:clamp(16px,2vw,24px);bottom:calc(clamp(10px,1.4vw,16px) + 62px);width:clamp(48px,6vw,60px);height:clamp(48px,6vw,60px);
+  border-radius:50%;background:var(--green);color:#000;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 16px rgba(0,0,0,.4);opacity:0;transform:translateY(8px);transition:opacity .2s, transform .2s;pointer-events:none}
+.fab svg{width:44%;height:44%;fill:currentColor;display:block}
+.card-t.playing,.card-t.paused{background:var(--card2)}
+.card-t.playing .fab,.card-t.paused .fab{opacity:1;transform:none}
+.card-t.playing .ttl{color:var(--green)}
+.card-t.busy .cov{animation:pulse .7s ease-in-out infinite}
+.card-t.oops{animation:shake .4s}
+.eq{display:none;align-items:flex-end;gap:2px;height:14px;flex:0 0 auto}
+.eq i{width:3px;background:var(--green);border-radius:1px;animation:eq 1s ease-in-out infinite}
+.eq i:nth-child(2){animation-delay:-.4s}.eq i:nth-child(3){animation-delay:-.7s}.eq i:nth-child(4){animation-delay:-.2s}
+.card-t.playing .eq{display:flex}
+@keyframes eq{0%,100%{height:3px}50%{height:14px}}
+@keyframes pulse{50%{opacity:.45}}
 @keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
-@media (prefers-reduced-motion: reduce){.pebble.playing,.pebble.busy .emo,.pebble.busy .pic{animation:none}}
-.empty{max-width:34em;margin:12vh auto 0;text-align:center;color:var(--soft);font-size:20px;line-height:1.5}
+@media (prefers-reduced-motion: reduce){.eq i,.card-t.busy .cov{animation:none}.eq i{height:10px}}
+.empty{max-width:34em;margin:14vh auto 0;text-align:center;color:var(--soft);font-size:20px;line-height:1.5}
 .empty b{color:var(--ink)}
 
-.dock{position:fixed;left:0;right:0;bottom:0;padding:14px 18px calc(14px + env(safe-area-inset-bottom,0px));
-  display:flex;justify-content:center;align-items:center;gap:28px;pointer-events:none}
-.stop svg{display:block;flex:0 0 auto;width:clamp(54px,7.2vw,66px);height:clamp(54px,7.2vw,66px);fill:currentColor}
-.stop:disabled{cursor:default}
-.stop{--b:#E5484D;pointer-events:auto;width:clamp(104px,14vw,128px);height:clamp(104px,14vw,128px);border-radius:50%;border:0;background:var(--b);color:#fff;font-size:clamp(48px,6.5vw,60px);
-  display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 0 color-mix(in srgb,var(--b) 60%,#000 40%);opacity:.3;transition:opacity .2s}
-#next{--b:#2F7BEA}
-.stop.on{opacity:1}
-.stop:active{transform:translateY(7px);box-shadow:0 1px 0 color-mix(in srgb,var(--b) 60%,#000 40%)}
-.gear{pointer-events:auto;position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(22px + env(safe-area-inset-bottom,0px));
-  width:44px;height:44px;border-radius:50%;border:0;background:transparent;color:var(--soft);font-size:22px;opacity:.5;cursor:pointer}
-.gear svg{position:absolute;inset:0}
-.gear circle{stroke:var(--ink);stroke-dasharray:126;stroke-dashoffset:126}
+/* právě hraje */
+.np{position:fixed;left:clamp(8px,1.5vw,16px);right:clamp(8px,1.5vw,16px);bottom:calc(10px + env(safe-area-inset-bottom,0px));
+  height:var(--bar);border-radius:14px;background:color-mix(in srgb,var(--tint,#3a2a6b) 55%,#121212 45%);
+  display:flex;align-items:center;gap:clamp(12px,2vw,22px);padding:0 clamp(12px,2vw,22px);box-shadow:0 -6px 30px rgba(0,0,0,.55);z-index:5}
+.np-cov{width:calc(var(--bar) - 36px);height:calc(var(--bar) - 36px);flex:0 0 auto;border-radius:8px;overflow:hidden;background:var(--card2);
+  display:flex;align-items:center;justify-content:center;font-size:44px;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.np-cov img{width:100%;height:100%;object-fit:cover}
+.np-txt{flex:1 1 auto;min-width:0}
+.np-t{font-weight:800;font-size:clamp(17px,2.2vw,22px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.np-s{color:var(--soft);font-size:clamp(14px,1.7vw,17px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.np-s .dev{color:var(--green);font-weight:700}
+.np-prog{position:absolute;left:18px;right:18px;bottom:8px;height:4px;border-radius:2px;background:rgba(255,255,255,.2);overflow:hidden}
+.np-prog i{display:block;height:100%;width:0;background:#fff;border-radius:2px;transition:width 1s linear}
+.ctl{flex:0 0 auto;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;padding:0}
+.ctl svg{display:block;fill:currentColor}
+.pp{width:clamp(88px,11vw,108px);height:clamp(88px,11vw,108px);border-radius:50%;background:#fff;color:#000;box-shadow:0 6px 18px rgba(0,0,0,.4)}
+.pp svg{width:44%;height:44%}
+.pp:active{transform:scale(.93)}
+.nx{width:clamp(64px,8vw,84px);height:clamp(64px,8vw,84px);border-radius:50%;background:transparent;color:#fff}
+.nx svg{width:62%;height:62%}
+.nx:active{transform:scale(.9);background:rgba(255,255,255,.1)}
+.ctl:disabled{opacity:.3;cursor:default;transform:none}
+.np.idle .pp{opacity:.3}
+
+.gear{position:relative;width:48px;height:48px;border-radius:50%;border:0;background:rgba(0,0,0,.25);color:var(--soft);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.gear>svg.ic{width:24px;height:24px;fill:currentColor}
+.gear svg.rg{position:absolute;inset:0}
+.gear circle{stroke:var(--green);stroke-dasharray:145;stroke-dashoffset:145}
 .gear.hold circle{transition:stroke-dashoffset 2.5s linear;stroke-dashoffset:0}
-.hint{position:fixed;right:16px;bottom:calc(76px + env(safe-area-inset-bottom,0px));background:var(--panel);padding:8px 12px;border-radius:12px;
-  font-size:15px;opacity:0;transition:opacity .2s;pointer-events:none}
+.hint{position:fixed;right:16px;top:calc(76px + env(safe-area-inset-top,0px));background:var(--card2);padding:8px 12px;border-radius:8px;
+  font-size:15px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:6}
 .hint.show{opacity:1}
 
 /* ---------- rodičovský panel ---------- */
@@ -81,63 +107,125 @@ img{max-width:100%}
   padding:calc(20px + env(safe-area-inset-top,0px)) 20px calc(40px + env(safe-area-inset-bottom,0px))}
 .sheet.open{display:block}
 .wrap{max-width:720px;margin:0 auto}
-.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
-h1{font-size:32px;margin:0;font-weight:800}
-.card{background:var(--panel);border-radius:22px;padding:18px 20px;margin-bottom:16px}
-.card h2{font-size:21px;margin:0 0 6px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.top h1{font-size:32px;margin:0;font-weight:800}
+.card{background:var(--panel);border-radius:10px;padding:18px 20px;margin-bottom:14px}
+.card h2{font-size:20px;margin:0 0 6px;font-weight:700}
 .card p{margin:0 0 10px;color:var(--soft);line-height:1.5;font-size:16px}
-.card code{font-size:14px;word-break:break-all;background:var(--bg);padding:2px 6px;border-radius:6px;color:var(--ink)}
+.card code{font-size:14px;word-break:break-all;background:var(--card2);padding:2px 6px;border-radius:4px;color:var(--ink)}
 .status{font-weight:700}
 .status.ok{color:var(--ok)} .status.bad{color:var(--bad)}
-input[type=text],textarea{font-family:inherit;font-size:17px;padding:10px 12px;border-radius:12px;border:2px solid var(--line);
-  background:transparent;color:var(--ink);width:100%}
+input[type=text],textarea{font-family:inherit;font-size:17px;padding:11px 14px;border-radius:6px;border:1px solid #727272;
+  background:var(--card2);color:var(--ink);width:100%}
 textarea{min-height:90px;font-size:14px;font-family:ui-monospace,Menlo,monospace}
 .line{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
 .line input[type=text]{flex:1 1 220px}
-.btn{font-family:inherit;font-weight:700;font-size:17px;border:0;border-radius:14px;padding:10px 18px;cursor:pointer;background:var(--ink);color:var(--bg)}
-.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
-.btn.danger{background:transparent;color:var(--bad);border:2px solid currentColor}
+.btn{font-family:inherit;font-weight:700;font-size:16px;border:0;border-radius:999px;padding:11px 22px;cursor:pointer;background:var(--green);color:#000}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid #727272}
+.btn.danger{background:transparent;color:var(--bad);border:1px solid currentColor}
 .btn:disabled{opacity:.4}
-.btn:focus-visible,.mini:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--c3);outline-offset:2px}
-.dev{display:flex;align-items:center;gap:10px;padding:10px 12px;border:2px solid var(--line);border-radius:14px;margin-top:8px;cursor:pointer;font-size:17px}
-.dev input{width:22px;height:22px}
-input[type=range]{width:100%;accent-color:var(--ink)}
-.row{border-top:2px solid var(--line);padding:14px 0;display:grid;grid-template-columns:72px 1fr;gap:14px}
+.btn:focus-visible,.mini:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.devopt{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;margin-top:8px;cursor:pointer;font-size:17px}
+.devopt input{width:22px;height:22px;accent-color:var(--green)}
+input[type=range],input[type=checkbox]{accent-color:var(--green)}
+input[type=range]{width:100%}
+.row{border-top:1px solid var(--line);padding:14px 0;display:grid;grid-template-columns:72px 1fr;gap:14px}
 .row:first-of-type{border-top:0}
-.thumb{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:38px;overflow:hidden}
+.thumb{width:72px;height:72px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:38px;overflow:hidden}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .fields{min-width:0;display:flex;flex-direction:column;gap:8px}
 .fields .kind{font-size:14px;color:var(--soft)}
 .strip{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.mini{font-family:inherit;border:2px solid transparent;background:transparent;border-radius:10px;font-size:22px;width:40px;height:40px;cursor:pointer;color:var(--ink);padding:0}
-.mini.sel{border-color:var(--ink)}
+.mini{font-family:inherit;border:2px solid transparent;background:transparent;border-radius:8px;font-size:22px;width:40px;height:40px;cursor:pointer;color:var(--ink);padding:0}
+.mini.sel{border-color:var(--green)}
 .mini.cover{font-size:12px;width:auto;padding:0 8px;font-weight:700}
-.sw{width:32px;height:32px;border-radius:50%;border:3px solid transparent;cursor:pointer}
-.sw.sel{border-color:var(--ink)}
+.sw{width:32px;height:32px;border-radius:6px;border:3px solid transparent;cursor:pointer}
+.sw.sel{border-color:#fff}
 .acts{display:flex;flex-wrap:wrap;gap:8px}
-.acts .btn{font-size:15px;padding:7px 13px;border-radius:12px}
+.acts .btn{font-size:14px;padding:7px 14px}
 details summary{cursor:pointer;font-weight:700;font-size:17px}
-.toast{position:fixed;left:50%;bottom:calc(170px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);
-  padding:10px 18px;border-radius:14px;font-size:16px;opacity:0;transition:opacity .2s;z-index:20;pointer-events:none;max-width:90vw;text-align:center}
+.toast{position:fixed;left:50%;bottom:calc(var(--bar) + 30px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#fff;color:#000;font-weight:600;
+  padding:10px 18px;border-radius:8px;font-size:16px;opacity:0;transition:opacity .2s;z-index:20;pointer-events:none;max-width:90vw;text-align:center}
 .toast.show{opacity:1}
 .hidden{display:none}
+.sec{font-size:clamp(21px,2.7vw,27px);font-weight:800;letter-spacing:-.01em;margin:30px 0 14px}
+.sec:first-child{margin-top:8px}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin:-8px 0 18px}
+.chip{font-family:inherit;font-size:clamp(15px,1.8vw,17px);font-weight:600;border:0;border-radius:999px;padding:9px 18px;background:rgba(255,255,255,.1);color:var(--ink);cursor:pointer}
+.chip.sel{background:var(--green);color:#000}
+.chip:active{transform:scale(.94)}
+.head-r{display:flex;gap:10px;align-items:center}
+.cov.liked{background:linear-gradient(135deg,#450af5 0%,#8e8ee5 55%,#c4efd9 100%)}
+.cov.liked svg{position:relative;width:42%;height:42%;fill:#fff}
+.toy{flex:0 0 auto;width:clamp(52px,6.4vw,64px);height:clamp(52px,6.4vw,64px);border-radius:50%;border:0;background:transparent;color:var(--soft);
+  display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer;padding:0;font-family:inherit}
+.toy svg{display:block;width:50%;height:50%;fill:currentColor}
+.toy:active{background:rgba(255,255,255,.1)}
+.toy.on{color:var(--green)}
+.toy.dot.on::after{content:"";position:absolute;bottom:5px;left:50%;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--green)}
+.toy.heart svg path{fill:none;stroke:currentColor;stroke-width:2}
+.toy.heart.on svg path{fill:currentColor}
+.head .toy{width:48px;height:48px;background:rgba(0,0,0,.25)}
+.boop{animation:boop .45s}
+@keyframes boop{30%{transform:scale(1.28) rotate(-10deg)}65%{transform:scale(.92) rotate(7deg)}}
+.ctrls{display:flex;align-items:center;gap:clamp(2px,1vw,10px);flex:0 0 auto}
+select{font-family:inherit;font-size:16px;padding:10px 12px;border-radius:6px;border:1px solid #727272;background:var(--card2);color:var(--ink)}
+@media (max-width:760px){ .toy.wide{display:none} }
+@media (prefers-reduced-motion: reduce){ .boop{animation:none} }
 </style>
 </head>
 <body>
 
-<main class="stage">
-  <div class="grid" id="grid"></div>
+<main class="stage" id="stage">
+  <header class="head">
+    <h1 id="greet">Dobrý den</h1>
+    <div class="head-r">
+    <button class="toy" data-boop aria-label="Novinky">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a2.5 2.5 0 0 0 2.5-2.5h-5A2.5 2.5 0 0 0 12 22zm7-6v-5a7 7 0 0 0-5.5-6.8v-.7a1.5 1.5 0 0 0-3 0v.7A7 7 0 0 0 5 11v5l-2 2v1h18v-1l-2-2z"/></svg>
+    </button>
+    <button class="gear" id="gear" aria-label="Pro rodiče: podržte 3 sekundy">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3.3h-4l-.3 2.6a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.5 7.5 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1c.5.4 1.1.7 1.7 1l.3 2.6h4l.3-2.6c.6-.3 1.2-.6 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)"/></svg>
+      <svg class="rg" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22.5" fill="none" stroke-width="3" transform="rotate(-90 24 24)"/></svg>
+    </button>
+    </div>
+  </header>
+  <div class="chips" id="chips">
+    <button class="chip sel">Vše</button><button class="chip">Hudba</button><button class="chip">Pohádky</button><button class="chip">Podcasty</button>
+  </div>
+  <div id="sections"></div>
   <div class="empty hidden" id="empty"></div>
 </main>
 
-<div class="dock">
-  <button class="stop" id="stop" aria-label="Zastavit hudbu">■</button>
-  <button class="stop" id="next" aria-label="Další písnička" disabled>
-    <svg viewBox="0 0 40 40" width="60" height="60" aria-hidden="true"><path d="M5 8 L19 20 L5 32 Z M19 8 L33 20 L19 32 Z"/><rect x="32" y="8" width="4" height="24" rx="1.5"/></svg>
+<div class="np idle" id="np">
+  <div class="np-cov" id="npCov">🎵</div>
+  <div class="np-txt">
+    <div class="np-t" id="npT">Vyber si písničku</div>
+    <div class="np-s" id="npS"></div>
+  </div>
+  <button class="toy heart" data-toggle aria-label="Líbí se mi">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.3-4.5-9.3-8.9C1.3 8.3 3.3 4.6 6.8 4.6c2 0 3.5 1.1 4.2 2.3.7-1.2 2.2-2.3 4.2-2.3 3.5 0 5.5 3.7 4.1 7-2 4.4-7.3 8.9-7.3 8.9z"/></svg>
   </button>
-  <button class="gear" id="gear" aria-label="Pro rodiče: podržte 3 sekundy">
-    <svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="20" fill="none" stroke-width="3" transform="rotate(-90 22 22)"/></svg>⚙︎
-  </button>
+  <div class="ctrls">
+    <button class="toy dot wide" data-toggle aria-label="Náhodně">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3l4 4-4 4V8h-2a3 3 0 0 0-2.4 1.2l-5 6.6A5 5 0 0 1 3.6 18H2v-2h1.6a3 3 0 0 0 2.4-1.2l5-6.6A5 5 0 0 1 15 6h2V3zM2 6h1.6a5 5 0 0 1 4 2l.5.7-1.2 1.6-.9-1.1A3 3 0 0 0 3.6 8H2V6zm15 7l4 4-4 4v-3h-2a5 5 0 0 1-4-2l-.5-.7 1.2-1.6.9 1.1A3 3 0 0 0 15 16h2v-3z"/></svg>
+    </button>
+    <button class="toy" data-boop aria-label="Předchozí">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 5.5v13a.8.8 0 0 1-1.2.7l-10-6.5a.8.8 0 0 1 0-1.4l10-6.5A.8.8 0 0 1 19 5.5z"/><rect x="4.4" y="5" width="2.6" height="14" rx="1"/></svg>
+    </button>
+    <button class="ctl pp" id="stop" aria-label="Přehrát nebo pozastavit">
+      <svg viewBox="0 0 24 24" width="44" height="44" aria-hidden="true" id="ppIcon"></svg>
+    </button>
+    <button class="ctl nx" id="next" aria-label="Další písnička" disabled>
+      <svg viewBox="0 0 24 24" width="48" height="48" aria-hidden="true"><path d="M5 5.5v13a.8.8 0 0 0 1.2.7l10-6.5a.8.8 0 0 0 0-1.4l-10-6.5A.8.8 0 0 0 5 5.5z"/><rect x="17" y="5" width="2.6" height="14" rx="1"/></svg>
+    </button>
+    <button class="toy dot wide" data-toggle aria-label="Opakovat">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
+    </button>
+    <button class="toy wide" data-boop aria-label="Zařízení">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm5 2.5a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6zm0 6.5a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0 2a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/></svg>
+    </button>
+  </div>
+  <div class="np-prog"><i id="npBar"></i></div>
 </div>
 <div class="hint" id="hint">Podržte 3 sekundy</div>
 
@@ -180,6 +268,22 @@ details summary{cursor:pointer;font-weight:700;font-size:17px}
     </div>
 
     <div class="card">
+      <h2>5. Často poslouchané</h2>
+      <p>Na hlavní obrazovce se ukážou vaše nejposlouchanější skladby ze Spotify. Po nahrání této verze se jednou znovu přihlaste (karta 1), aby k nim aplikace dostala přístup.</p>
+      <label class="line"><input type="checkbox" id="topOn"> zobrazovat</label>
+      <label class="line"><input type="checkbox" id="topClean"> skrýt skladby, které Spotify označuje jako explicitní</label>
+      <div class="line">
+        <select id="topRange" aria-label="Období">
+          <option value="short_term">Poslední měsíc</option>
+          <option value="medium_term">Posledního půl roku</option>
+          <option value="long_term">Za celou dobu</option>
+        </select>
+        <button class="btn ghost" id="topReload">Načíst znovu</button>
+      </div>
+      <p id="topStatus" style="margin-top:10px"></p>
+    </div>
+
+    <div class="card">
       <h2>Zamknout iPad</h2>
       <p>Nastavení → Zpřístupnění → Řízený přístup → zapnout a nastavit kód. Pak tady trojklik bočním tlačítkem → Spustit.</p>
     </div>
@@ -201,7 +305,10 @@ details summary{cursor:pointer;font-weight:700;font-size:17px}
 (() => {
   const EMOJI = ["🐻","🐶","🐱","🐰","🦁","🐸","🐘","🐟","🦆","🚂","🚗","🚜","🌞","🌙","⭐","🎈","🎵","🥁","🍎","🌈"];
   const COLORS = ["var(--c1)","var(--c2)","var(--c3)","var(--c4)","var(--c5)","var(--c6)"];
-  const SCOPES = "user-read-playback-state user-modify-playback-state";
+  const TINT = { "var(--c1)":"#7a1336", "var(--c2)":"#1E3264", "var(--c3)":"#4d3a63", "var(--c4)":"#7a2408", "var(--c5)":"#164d10", "var(--c6)":"#6b3a0a" };
+  const ICON_PLAY = '<path d="M7 4.6v14.8a1 1 0 0 0 1.5.86l12.4-7.4a1 1 0 0 0 0-1.72L8.5 3.74A1 1 0 0 0 7 4.6z"/>';
+  const ICON_PAUSE = '<rect x="5.5" y="4" width="4.6" height="16" rx="1.2"/><rect x="13.9" y="4" width="4.6" height="16" rx="1.2"/>';
+  const SCOPES = "user-read-playback-state user-modify-playback-state user-top-read";
   const REDIRECT = location.origin + location.pathname;
   const $ = id => document.getElementById(id);
 
@@ -209,12 +316,38 @@ details summary{cursor:pointer;font-weight:700;font-size:17px}
   const K = "oblazky-sp-";
   const get = (k, d) => { try { const v = localStorage.getItem(K+k); return v == null ? d : JSON.parse(v); } catch(e){ return d; } };
   const put = (k, v) => { try { localStorage.setItem(K+k, JSON.stringify(v)); } catch(e){} };
-  let cfg = Object.assign({ clientId:"", device:null, volOn:false, vol:40, tiles:[] }, get("cfg", {}));
+  let cfg = Object.assign({ clientId:"", device:null, volOn:false, vol:40, tiles:[], showTop:true, topRange:"medium_term", hideExplicit:true }, get("cfg", {}));
   let tok = get("tok", null);          // {access, refresh, exp}
   const saveCfg = () => put("cfg", cfg);
   const saveTok = () => put("tok", tok);
 
   let current = null, isPlaying = false, lastAction = 0;
+  let now = { title:"", artist:"", cover:null, prog:0 };
+
+  /* ---------- často poslouchané ---------- */
+  let top = get("top", { at:0, range:"", items:[] }), topErr = "";
+  const MIX = { id:"topmix", type:"mix", uri:"spotify:mix:oblibene", name:"Tvoje oblíbené", emoji:"💜", color:"var(--c2)", cover:null, useCover:false };
+  const pickImg = imgs => imgs && imgs.length ? (imgs[1] || imgs[0]).url : null;
+  const topItems = () => cfg.showTop ? top.items.filter(x => !(cfg.hideExplicit && x.explicit)) : [];
+  const topUris = () => topItems().map(x => x.uri);
+  function topTiles(){
+    return topItems().slice(0, 20).map((x, i) => ({ id:"top:" + x.id, uri:x.uri, type:"toptrack", name:x.name, artist:x.artist,
+      cover:x.cover, useCover:true, emoji:"🎵", color:COLORS[i % COLORS.length] }));
+  }
+  const allTiles = () => { const t = topTiles(); return [...cfg.tiles, ...(t.length ? [MIX, ...t] : [])]; };
+  async function loadTop(force){
+    if (!tok || !cfg.showTop) return;
+    if (!force && top.items.length && top.range === cfg.topRange && Date.now() - top.at < 6 * 3600e3) return;
+    try {
+      const j = await api("GET", "/me/top/tracks?limit=50&time_range=" + cfg.topRange);
+      top = { at:Date.now(), range:cfg.topRange, items:((j && j.items) || []).map(x => ({ id:x.id, uri:x.uri, name:x.name,
+        artist:(x.artists || []).map(a => a.name).join(", "), cover:pickImg(x.album && x.album.images), explicit:!!x.explicit })) };
+      put("top", top); topErr = "";
+    } catch(e){
+      topErr = (e.status === 403 || e.status === 401) ? "Aplikace k nim zatím nemá přístup. Přihlaste se ke Spotify znovu (karta 1)." : "Nepodařilo se načíst: " + e.message;
+    }
+  }
+  const skladeb = n => n === 1 ? "1 skladba" : (n >= 2 && n <= 4 ? n + " skladby" : n + " skladeb");
 
   function toast(msg){
     const t = $("toast"); t.textContent = msg; t.classList.add("show");
@@ -249,7 +382,7 @@ details summary{cursor:pointer;font-weight:700;font-size:17px}
     const verifier = sessionStorage.getItem(K+"ver") || get("ver", "");
     try {
       await tokenReq({ grant_type:"authorization_code", code:p.get("code"), redirect_uri:REDIRECT, client_id:cfg.clientId, code_verifier:verifier });
-      toast("Přihlášeno ke Spotify");
+      toast("Přihlášeno ke Spotify"); await loadTop(true);
       openSheet();
     } catch(e){ toast("Přihlášení selhalo: " + e.message); }
   }
@@ -283,7 +416,11 @@ details summary{cursor:pointer;font-weight:700;font-size:17px}
   /* ---------- přehrávání ---------- */
   async function playTile(t){
     const id = await resolveDevice();
-    const body = t.uri.startsWith("spotify:track:") ? { uris:[t.uri] } : { context_uri:t.uri };
+    let body;
+    if (t.type === "mix" || t.type === "toptrack"){
+      const uris = topUris(); const i = t.type === "mix" ? 0 : Math.max(0, uris.indexOf(t.uri));
+      body = { uris, offset:{ position:i } };
+    } else body = t.uri.startsWith("spotify:track:") ? { uris:[t.uri] } : { context_uri:t.uri };
     try { await api("PUT", "/me/player/play?device_id=" + id, body); }
     catch(e){
       if (e.status !== 404) throw e;
@@ -299,7 +436,7 @@ details summary{cursor:pointer;font-weight:700;font-size:17px}
     try {
       if (current === t.id && isPlaying){ await api("PUT", "/me/player/pause"); isPlaying = false; }
       else if (current === t.id){ const id = await resolveDevice(); await api("PUT", "/me/player/play?device_id=" + id); isPlaying = true; }
-      else { await playTile(t); current = t.id; isPlaying = true; }
+      else { await playTile(t); current = t.id; isPlaying = true; now = { title:t.name, artist:"", cover:t.cover, prog:0 }; }
     } catch(e){
       el.classList.add("oops"); setTimeout(() => el.classList.remove("oops"), 450);
       toast(e.message);
@@ -307,13 +444,13 @@ details summary{cursor:pointer;font-weight:700;font-size:17px}
     el.classList.remove("busy"); lastAction = Date.now(); paint();
   }
   $("stop").addEventListener("click", async () => {
-    if (!current) return;
-    try { await api("PUT", "/me/player/pause"); } catch(e){}
-    current = null; isPlaying = false; paint();
+    const t = tileOf(current); if (!t) return;
+    const el = document.querySelector(`.card-t[data-id="${t.id}"]`);
+    tap(t, el || $("stop"));
   });
 
   // další písnička – jen u alba, playlistu nebo interpreta
-  const tileOf = id => cfg.tiles.find(t => t.id === id);
+  const tileOf = id => allTiles().find(t => t.id === id);
   const canNext = () => { const t = tileOf(current); return !!(t && t.type !== "track" && isPlaying); };
   $("next").addEventListener("click", async () => {
     const b = $("next");
@@ -333,7 +470,7 @@ details summary{cursor:pointer;font-weight:700;font-size:17px}
   // a „current“ jen přepisujeme, když hraje jiné naše tlačítko – nikdy ho nemažeme
   const idOf = u => (u || "").split(":").pop();
   async function poll(){
-    if (document.hidden || !tok || !cfg.tiles.length) return;
+    if (document.hidden || !tok || !allTiles().length) return;
     if (Date.now() - lastAction < 3000) return;
     try {
       const s = await api("GET", "/me/player");
@@ -342,42 +479,104 @@ details summary{cursor:pointer;font-weight:700;font-size:17px}
       else {
         isPlaying = !!s.is_playing;
         const ctx = idOf(s.context && s.context.uri), item = idOf(s.item && s.item.uri);
-        const hit = cfg.tiles.find(t => idOf(t.uri) === ctx || idOf(t.uri) === item);
-        if (hit) current = hit.id;
+        const hit = allTiles().find(t => idOf(t.uri) === ctx || idOf(t.uri) === item);
+        if (hit && !(current === MIX.id && hit.type === "toptrack")) current = hit.id;
+        if (s.item){
+          const imgs = (s.item.album && s.item.album.images) || [];
+          now = { title:s.item.name || "", artist:(s.item.artists || []).map(a => a.name).join(", "),
+            cover: imgs.length ? (imgs[1] || imgs[0]).url : null,
+            prog: s.item.duration_ms ? (s.progress_ms || 0) / s.item.duration_ms : 0 };
+        }
       }
       paint();
     } catch(e){}
   }
-  setInterval(poll, 10000);
+  setInterval(poll, 5000);
   document.addEventListener("visibilitychange", poll);
 
   /* ---------- dětská plocha ---------- */
+  const KIND_UP = { track:"Skladba", album:"Album", playlist:"Playlist", artist:"Interpret" };
+  function greet(){
+    const h = new Date().getHours();
+    $("greet").textContent = h < 10 ? "Dobré ráno" : h < 18 ? "Dobré odpoledne" : "Dobrý večer";
+  }
+  function card(t, sub){
+    const b = document.createElement("button");
+    b.className = "card-t"; b.dataset.id = t.id; b.setAttribute("aria-label", t.name);
+    b.innerHTML = `<div class="cov" style="--col:${t.color}"></div>
+      <div class="ttl"><span class="eq"><i></i><i></i><i></i><i></i></span><span class="nm"></span></div>
+      <div class="sub"></div>
+      <span class="fab"><svg viewBox="0 0 24 24" width="24" height="24"></svg></span>`;
+    const cov = b.querySelector(".cov");
+    if (t.type === "mix"){
+      cov.classList.add("liked");
+      cov.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.3-4.5-9.3-8.9C1.3 8.3 3.3 4.6 6.8 4.6c2 0 3.5 1.1 4.2 2.3.7-1.2 2.2-2.3 4.2-2.3 3.5 0 5.5 3.7 4.1 7-2 4.4-7.3 8.9-7.3 8.9z"/></svg>';
+    } else if (t.useCover && t.cover){ const im = new Image(); im.alt = ""; im.src = t.cover; cov.appendChild(im); }
+    else { const sp = document.createElement("span"); sp.className = "emo"; sp.textContent = t.emoji; cov.appendChild(sp); }
+    b.querySelector(".nm").textContent = t.name;
+    b.querySelector(".sub").textContent = sub || "";
+    b.addEventListener("click", () => tap(t, b));
+    return b;
+  }
   function renderGrid(){
-    const g = $("grid"); g.innerHTML = "";
+    greet();
+    const S = $("sections"); S.innerHTML = "";
+    const tops = topTiles();
+    const ready = tok && cfg.device && (cfg.tiles.length || tops.length);
     const E = $("empty");
-    const ready = tok && cfg.device && cfg.tiles.length;
     E.classList.toggle("hidden", !!ready);
-    if (!ready) E.innerHTML = "Ještě to není nastavené.<br><b>Podržte kolečko vpravo dole 3 sekundy.</b>";
-    if (!cfg.tiles.length) return;
-    cfg.tiles.forEach(t => {
-      const b = document.createElement("button");
-      b.className = "pebble"; b.style.setProperty("--col", t.color); b.dataset.id = t.id; b.setAttribute("aria-label", t.name);
-      if (t.useCover && t.cover){ const im = new Image(); im.className = "pic"; im.alt = ""; im.src = t.cover; b.appendChild(im); }
-      else { const s = document.createElement("span"); s.className = "emo"; s.textContent = t.emoji; b.appendChild(s); }
-      b.addEventListener("click", () => tap(t, b));
-      g.appendChild(b);
-    });
+    if (!ready) E.innerHTML = "Ještě to není nastavené.<br><b>Podržte ozubené kolečko vpravo nahoře 3 sekundy.</b>";
+    const section = (title, list, subOf) => {
+      if (!list.length) return;
+      const h = document.createElement("h2"); h.className = "sec"; h.textContent = title;
+      const g = document.createElement("div"); g.className = "grid";
+      list.forEach(t => g.appendChild(card(t, subOf(t))));
+      S.append(h, g);
+    };
+    section("Pro tebe", cfg.tiles, t => KIND_UP[t.type] || "");
+    if (tops.length) section("Často posloucháš", [MIX, ...tops], t => t.type === "mix" ? "Playlist · " + skladeb(topItems().length) : t.artist);
     paint();
   }
   function paint(){
-    document.querySelectorAll(".pebble").forEach(p => {
+    document.querySelectorAll(".card-t").forEach(p => {
       const me = p.dataset.id === current;
       p.classList.toggle("playing", me && isPlaying);
       p.classList.toggle("paused", me && !isPlaying);
+      p.querySelector(".fab svg").innerHTML = me && isPlaying ? ICON_PAUSE : ICON_PLAY;
     });
-    $("stop").classList.toggle("on", !!current && isPlaying);
-    const n = canNext(); $("next").classList.toggle("on", n); $("next").disabled = !n;
+    const t = tileOf(current);
+    $("np").classList.toggle("idle", !t);
+    $("stop").disabled = !t;
+    $("ppIcon").innerHTML = t && isPlaying ? ICON_PAUSE : ICON_PLAY;
+    const n = canNext(); $("next").disabled = !n;
+    // barva pozadí podle hrající desky, jako ve Spotify
+    const tint = t ? (TINT[t.color] || "#3a2a6b") : "#3a2a6b";
+    document.documentElement.style.setProperty("--tint", tint);
+    // lišta právě hraje
+    const cov = $("npCov"); cov.innerHTML = ""; cov.style.background = t ? t.color : "";
+    const img = (t && (now.cover || (t.useCover && t.cover))) || null;
+    if (img){ const im = new Image(); im.alt = ""; im.src = img; cov.appendChild(im); }
+    else cov.textContent = t ? t.emoji : "🎵";
+    $("npT").textContent = t ? (now.title || t.name) : "Vyber si písničku";
+    const S = $("npS"); S.innerHTML = "";
+    if (t){
+      if (now.artist){ S.append(document.createTextNode(now.artist + " · ")); }
+      const d = document.createElement("span"); d.className = "dev"; d.textContent = cfg.device ? cfg.device.name : "";
+      S.appendChild(d);
+    }
+    $("npBar").style.width = t ? Math.round(Math.min(1, now.prog) * 100) + "%" : "0";
   }
+
+  /* ---------- hrací tlačítka (nic neovládají) ---------- */
+  function boop(el){ el.classList.remove("boop"); void el.offsetWidth; el.classList.add("boop"); }
+  document.querySelectorAll(".toy").forEach(b => b.addEventListener("click", () => {
+    if (b.hasAttribute("data-toggle")) b.classList.toggle("on");
+    boop(b);
+  }));
+  $("chips").addEventListener("click", e => {
+    const c = e.target.closest(".chip"); if (!c) return;
+    document.querySelectorAll(".chip").forEach(x => x.classList.toggle("sel", x === c)); boop(c);
+  });
 
   /* ---------- skrytý vstup ---------- */
   const gear = $("gear"); let holdT = null;
@@ -389,7 +588,7 @@ details summary{cursor:pointer;font-weight:700;font-size:17px}
   gear.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); openSheet(); } });
 
   function openSheet(){ renderSheet(); $("sheet").classList.add("open"); }
-  $("done").addEventListener("click", () => { $("sheet").classList.remove("open"); renderGrid(); poll(); });
+  $("done").addEventListener("click", async () => { $("sheet").classList.remove("open"); renderGrid(); await loadTop(); renderGrid(); poll(); });
 
   /* ---------- nastavení ---------- */
   $("redir").textContent = REDIRECT;
@@ -397,6 +596,10 @@ details summary{cursor:pointer;font-weight:700;font-size:17px}
   $("login").addEventListener("click", () => { cfg.clientId = $("clientId").value.trim(); saveCfg(); login(); });
   $("logout").addEventListener("click", () => { tok = null; saveTok(); renderSheet(); });
   $("volOn").addEventListener("change", e => { cfg.volOn = e.target.checked; saveCfg(); });
+  $("topOn").addEventListener("change", async e => { cfg.showTop = e.target.checked; saveCfg(); await loadTop(true); renderSheet(); });
+  $("topClean").addEventListener("change", e => { cfg.hideExplicit = e.target.checked; saveCfg(); renderSheet(); });
+  $("topRange").addEventListener("change", async e => { cfg.topRange = e.target.value; saveCfg(); await loadTop(true); renderSheet(); });
+  $("topReload").addEventListener("click", async () => { await loadTop(true); renderSheet(); if (!topErr) toast("Hotovo"); });
   $("vol").addEventListener("input", e => { cfg.vol = +e.target.value; $("volVal").textContent = cfg.vol + " %"; saveCfg(); });
 
   $("findDev").addEventListener("click", async () => {
@@ -405,7 +608,7 @@ details summary{cursor:pointer;font-weight:700;font-size:17px}
       const list = await devices();
       box.innerHTML = list.length ? "" : "<p>Spotify teď nevidí žádné zařízení.</p>";
       list.forEach(d => {
-        const l = document.createElement("label"); l.className = "dev";
+        const l = document.createElement("label"); l.className = "devopt";
         const r = document.createElement("input"); r.type = "radio"; r.name = "dev";
         r.checked = cfg.device && (cfg.device.id === d.id || cfg.device.name === d.name);
         r.onchange = () => { cfg.device = { id:d.id, name:d.name }; saveCfg(); $("devName").textContent = d.name; };
@@ -441,6 +644,10 @@ details summary{cursor:pointer;font-weight:700;font-size:17px}
     st.textContent = tok ? "✓ přihlášeno" : "nepřihlášeno"; st.className = "status " + (tok ? "ok" : "bad");
     $("devName").textContent = cfg.device ? cfg.device.name : "nic";
     $("volOn").checked = cfg.volOn; $("vol").value = cfg.vol; $("volVal").textContent = cfg.vol + " %";
+    $("topOn").checked = cfg.showTop; $("topClean").checked = cfg.hideExplicit; $("topRange").value = cfg.topRange;
+    const ts = $("topStatus");
+    ts.textContent = !cfg.showTop ? "Vypnuto." : topErr ? topErr : top.items.length ? "Načteno: " + skladeb(topItems().length) + "." : "Zatím nenačteno.";
+    ts.className = "status " + (topErr ? "bad" : "");
     renderList();
   }
   function renderList(){
@@ -506,7 +713,7 @@ details summary{cursor:pointer;font-weight:700;font-size:17px}
   });
 
   /* ---------- start ---------- */
-  handleRedirect().finally(() => { renderGrid(); poll(); });
+  handleRedirect().finally(async () => { renderGrid(); await loadTop(); renderGrid(); poll(); });
 })();
 </script>
 </body>
